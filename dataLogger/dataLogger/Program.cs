@@ -297,50 +297,10 @@ namespace dataController {
 								
 								break;
 							}
-
-							/*switch (text) {
-								case ("Enter"):
-									sw.WriteLine();
-									break;
-								case ("Space"):
-									sw.Write(" ");
-									break;
-								case ("Period"):
-									sw.Write(".");
-									break;
-								case ("ShiftKeyLShiftKey"):
-									sw.Write("#shiftl");
-									break;
-								case ("ShiftKeyRShiftKey"):
-									sw.Write("#shiftr");
-									break;
-								case ("ControlKeyLControlKey"):
-									sw.Write("#ctrll");
-									break;
-								case ("ControlKeyRControlKey"):
-									sw.Write("#ctrlr");
-									break;
-								default: //sw.WriteLine(text);
-									sw.Write(text);
-									break;
-
-							}*/
-							//sw.WriteLine(text);
 						}
 						break;
 					}
 				}
-
-				/*Console.WriteLine("altPressed: " + altPressed + ", ctrlPressed: " + ctrlPressed + ", InsPressed:);
-				if (altPressed && ctrlPressed && InsPressed) {
-					if (System.Windows.Forms.Application.MessageLoop) {
-						// WinForms app
-						System.Windows.Forms.Application.Exit();
-					} else {
-						// Console app
-						System.Environment.Exit(1);
-					}
-				}*/
 			}
 		}
 	}
